@@ -1,0 +1,145 @@
+<div class="container py-5" style="max-width: 800px;">
+
+  <h2 class="fw-bold mb-4" style="color: #2c1810;">🛒 Mon Panier</h2>
+
+  <!-- Panier vide -->
+  <div *ngIf="cartItems.length === 0" class="text-center py-5">
+    <div class="fs-1 mb-3">🛒</div>
+    <h5 class="text-muted">Votre panier est vide</h5>
+    <a routerLink="/catalogue" class="btn mt-3 fw-semibold"
+      style="background-color: #c9933a; color: white;">
+      Voir le catalogue
+    </a>
+  </div>
+
+  <!-- Articles -->
+  <div *ngIf="cartItems.length > 0">
+
+    <div class="card border-0 shadow-sm mb-3" *ngFor="let item of cartItems">
+      <div class="card-body">
+        <div class="row align-items-center">
+
+          <!-- Image -->
+          <div class="col-2">
+            <div *ngIf="!item.product.imageUrl"
+              class="d-flex align-items-center justify-content-center rounded"
+              style="height: 60px; background: #f0e8d8;">
+              🌍
+            </div>
+            <img *ngIf="item.product.imageUrl" [src]="item.product.imageUrl"
+              class="img-fluid rounded" style="height: 60px; object-fit: cover;">
+          </div>
+
+          <!-- Infos -->
+          <div class="col-5">
+            <h6 class="fw-bold mb-0">{{ item.product.name }}</h6>
+            <small class="text-muted">{{ item.product.categoryName }}</small>
+          </div>
+
+          <!-- Quantité -->
+          <div class="col-3">
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-sm btn-outline-secondary"
+                (click)="updateQty(item.product.id!, item.quantity - 1)">−</button>
+              <span class="fw-bold">{{ item.quantity }}</span>
+              <button class="btn btn-sm btn-outline-secondary"
+                (click)="updateQty(item.product.id!, item.quantity + 1)">+</button>
+            </div>
+          </div>
+
+          <!-- Prix + Supprimer -->
+          <div class="col-2 text-end">
+            <div class="fw-bold" style="color: #c9933a;">
+              {{ item.product.price * item.quantity }}€
+            </div>
+            <button class="btn btn-sm text-danger p-0 mt-1"
+              (click)="removeItem(item.product.id!)">🗑️</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Total -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body d-flex justify-content-between align-items-center">
+        <span class="fw-bold fs-5">Total</span>
+        <span class="fw-bold fs-4" style="color: #c9933a;">{{ total }}€</span>
+      </div>
+    </div>
+
+    <!-- Formulaire commande -->
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white fw-bold py-3" style="color: #2c1810;">
+        📋 Informations de livraison
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="onOrder()">
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Nom complet *</label>
+              <input type="text" class="form-control"
+                [(ngModel)]="orderForm.customerName"
+                name="customerName" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Email *</label>
+              <input type="email" class="form-control"
+                [(ngModel)]="orderForm.customerEmail"
+                name="customerEmail" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Téléphone *</label>
+            <input type="tel" class="form-control"
+              placeholder="+33 6 XX XX XX XX"
+              [(ngModel)]="orderForm.customerPhone"
+              name="customerPhone" required>
+          </div>
+
+          <!-- Mode de contact -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Mode de finalisation *</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio"
+                  id="whatsapp" value="WHATSAPP"
+                  [(ngModel)]="orderForm.contactMethod"
+                  name="contactMethod">
+                <label class="form-check-label" for="whatsapp">
+                  💬 Finaliser via WhatsApp
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio"
+                  id="payment" value="ONLINE_PAYMENT"
+                  [(ngModel)]="orderForm.contactMethod"
+                  name="contactMethod">
+                <label class="form-check-label" for="payment">
+                  💳 Paiement en ligne
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="errorMessage" class="alert alert-danger py-2 small">
+            {{ errorMessage }}
+          </div>
+          <div *ngIf="successMessage" class="alert alert-success py-2 small">
+            {{ successMessage }}
+          </div>
+
+          <button type="submit" class="btn w-100 fw-bold py-2"
+            style="background-color: #2c1810; color: white;"
+            [disabled]="loading">
+            {{ loading ? 'Envoi en cours...' : 'Confirmer la commande — ' + total + '€' }}
+          </button>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center"
+  style="background: linear-gradient(135deg, #2c1810 0%, #8b4513 100%);">
+  <div class="card shadow-lg border-0 p-4" style="width: 100%; max-width: 420px; border-radius: 16px;">
+
+    <div class="text-center mb-4">
+      <div class="fs-1 mb-2">🌍</div>
+      <h3 class="fw-bold" style="color: #2c1810;">UniversAfricain</h3>
+      <p class="text-muted small">Espace administrateur</p>
+    </div>
+
+    <form (ngSubmit)="onLogin()">
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Email</label>
+        <input type="email" class="form-control" placeholder="admin@universafricain.com"
+          [(ngModel)]="email" name="email" required>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Mot de passe</label>
+        <input type="password" class="form-control" placeholder="••••••••"
+          [(ngModel)]="password" name="password" required>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger py-2 small">
+        {{ errorMessage }}
+      </div>
+
+      <button type="submit" class="btn w-100 fw-bold py-2"
+        style="background-color: #c9933a; color: white;"
+        [disabled]="loading">
+        {{ loading ? 'Connexion...' : 'Se connecter' }}
+      </button>
+
+    </form>
+  </div>
+</div>

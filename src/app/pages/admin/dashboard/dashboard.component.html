@@ -1,0 +1,154 @@
+<div class="container-fluid py-4">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold mb-0" style="color: #2c1810;">Dashboard Admin</h2>
+      <p class="text-muted small mb-0">Bienvenue sur UniversAfricain</p>
+    </div>
+    <a routerLink="/admin/products/new" class="btn fw-bold"
+      style="background-color: #c9933a; color: white;">
+      + Ajouter un produit
+    </a>
+  </div>
+
+  <!-- Stats -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3 col-6">
+      <div class="card border-0 shadow-sm p-3 text-center">
+        <div class="fs-2 fw-bold" style="color: #c9933a;">{{ orders.length }}</div>
+        <div class="small text-muted">Commandes</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="card border-0 shadow-sm p-3 text-center">
+        <div class="fs-2 fw-bold" style="color: #c9933a;">{{ pendingOrders }}</div>
+        <div class="small text-muted">En attente</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="card border-0 shadow-sm p-3 text-center">
+        <div class="fs-2 fw-bold" style="color: #c9933a;">{{ totalRevenue }}€</div>
+        <div class="small text-muted">Chiffre d'affaires</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="card border-0 shadow-sm p-3 text-center">
+        <div class="fs-2 fw-bold" style="color: #c9933a;">{{ products.length }}</div>
+        <div class="small text-muted">Produits</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Commandes récentes -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white fw-bold py-3" style="color: #2c1810;">
+      📦 Commandes récentes
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>Client</th>
+              <th>Total</th>
+              <th>Contact</th>
+              <th>Statut</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of orders">
+              <td class="fw-bold">#{{ order.id }}</td>
+              <td>
+                <div>{{ order.customerName }}</div>
+                <small class="text-muted">{{ order.customerEmail }}</small>
+              </td>
+              <td class="fw-bold" style="color: #c9933a;">{{ order.totalAmount }}€</td>
+              <td>
+                <span class="badge"
+                  [ngClass]="order.contactMethod === 'WHATSAPP' ? 'bg-success' : 'bg-primary'">
+                  {{ order.contactMethod === 'WHATSAPP' ? '💬 WhatsApp' : '💳 Paiement' }}
+                </span>
+              </td>
+              <td>
+                <select class="form-select form-select-sm"
+                  (change)="updateStatus(order.id, $any($event.target).value)"
+                  [value]="order.status">
+                  <option value="PENDING">En attente</option>
+                  <option value="CONFIRMED">Confirmée</option>
+                  <option value="SHIPPED">Expédiée</option>
+                  <option value="DELIVERED">Livrée</option>
+                  <option value="CANCELLED">Annulée</option>
+                </select>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="{
+                  'bg-warning text-dark': order.status === 'PENDING',
+                  'bg-info': order.status === 'CONFIRMED',
+                  'bg-primary': order.status === 'SHIPPED',
+                  'bg-success': order.status === 'DELIVERED',
+                  'bg-danger': order.status === 'CANCELLED'
+                }">{{ order.status }}</span>
+              </td>
+            </tr>
+            <tr *ngIf="orders.length === 0">
+              <td colspan="6" class="text-center text-muted py-4">
+                Aucune commande pour l'instant
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Produits -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white fw-bold py-3" style="color: #2c1810;">
+      🛍️ Produits
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Nom</th>
+              <th>Catégorie</th>
+              <th>Prix</th>
+              <th>Stock</th>
+              <th>Disponible</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of products">
+              <td class="fw-semibold">{{ product.name }}</td>
+              <td><span class="badge bg-secondary">{{ product.categoryName }}</span></td>
+              <td style="color: #c9933a;">{{ product.price }}€</td>
+              <td>{{ product.stock }}</td>
+              <td>
+                <span class="badge" [ngClass]="product.isAvailable ? 'bg-success' : 'bg-danger'">
+                  {{ product.isAvailable ? 'Oui' : 'Non' }}
+                </span>
+              </td>
+              <td>
+                <a [routerLink]="['/admin/products', product.id]"
+                  class="btn btn-sm btn-outline-warning me-1">✏️</a>
+                <button class="btn btn-sm btn-outline-danger"
+                  (click)="deleteProduct(product.id!)">🗑️</button>
+              </td>
+            </tr>
+            <tr *ngIf="products.length === 0">
+              <td colspan="6" class="text-center text-muted py-4">
+                Aucun produit pour l'instant
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>

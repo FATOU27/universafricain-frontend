@@ -1,0 +1,138 @@
+<div class="container py-4" style="max-width: 700px;">
+
+  <!-- Header -->
+  <div class="d-flex align-items-center mb-4">
+    <a routerLink="/admin/dashboard" class="btn btn-outline-secondary btn-sm me-3">
+      ← Retour
+    </a>
+    <div>
+      <h3 class="fw-bold mb-0" style="color: #2c1810;">
+        {{ isEditMode ? 'Modifier le produit' : 'Nouveau produit' }}
+      </h3>
+    </div>
+  </div>
+
+  <form (ngSubmit)="onSubmit()">
+
+    <!-- Nom -->
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Nom du produit *</label>
+      <input type="text" class="form-control"
+        placeholder="Ex: Nappe Bogolan Premium"
+        [(ngModel)]="product.name" name="name" required>
+    </div>
+
+    <!-- Description -->
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Description *</label>
+      <textarea class="form-control" rows="4"
+        placeholder="Décris le produit, ses dimensions, matières..."
+        [(ngModel)]="product.description" name="description" required>
+      </textarea>
+    </div>
+
+    <!-- Prix + Stock -->
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Prix (€) *</label>
+        <input type="number" class="form-control" placeholder="0.00"
+          [(ngModel)]="product.price" name="price" required min="0">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Stock *</label>
+        <input type="number" class="form-control" placeholder="0"
+          [(ngModel)]="product.stock" name="stock" required min="0">
+      </div>
+    </div>
+
+    <!-- Catégorie + Origine -->
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Catégorie *</label>
+        <select class="form-select"
+          [(ngModel)]="product.categorySlug" name="categorySlug" required>
+          <option value="">-- Choisir --</option>
+          <option value="tissus">Tissus (Bogolan & Batik)</option>
+          <option value="nappes">Nappes & Sets de table</option>
+          <option value="sacs">Sacs & Accessoires</option>
+          <option value="paniers">Paniers & Déco</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Origine</label>
+        <input type="text" class="form-control" placeholder="Ex: Dakar, Sénégal"
+          [(ngModel)]="product.origine" name="origine">
+      </div>
+    </div>
+
+  <!-- Upload image -->
+<div class="mb-3">
+  <label class="form-label fw-semibold">Image du produit</label>
+
+  <!-- Input file -->
+  <div class="d-flex gap-2 align-items-center">
+    <input type="file" class="form-control"
+      accept="image/*"
+      (change)="onFileSelected($event)">
+    <button type="button" class="btn fw-semibold"
+      style="background-color: #c9933a; color: white; white-space: nowrap;"
+      (click)="uploadImage()"
+      [disabled]="!selectedFile || uploading">
+      {{ uploading ? '⏳...' : '☁️ Upload' }}
+    </button>
+  </div>
+
+  <!-- Barre de progression -->
+  <div *ngIf="uploading" class="mt-2">
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped progress-bar-animated"
+        style="width: 100%; background-color: #c9933a;"></div>
+    </div>
+    <small class="text-muted">Upload en cours...</small>
+  </div>
+
+  <!-- Message succès upload -->
+  <div *ngIf="uploadSuccess" class="alert alert-success py-1 small mt-2">
+    ✅ Image uploadée avec succès !
+  </div>
+
+  <!-- Aperçu image -->
+  <div *ngIf="product.imageUrl" class="mt-2">
+    <img [src]="product.imageUrl" alt="Aperçu"
+      style="height: 150px; object-fit: cover; border-radius: 8px; border: 2px solid #c9933a;">
+  </div>
+</div>
+
+    <!-- Disponible -->
+    <div class="mb-4">
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="isAvailable"
+          [(ngModel)]="product.isAvailable" name="isAvailable">
+        <label class="form-check-label fw-semibold" for="isAvailable">
+          Produit disponible à la vente
+        </label>
+      </div>
+    </div>
+
+    <!-- Message erreur/succès -->
+    <div *ngIf="errorMessage" class="alert alert-danger py-2 small">
+      {{ errorMessage }}
+    </div>
+    <div *ngIf="successMessage" class="alert alert-success py-2 small">
+      {{ successMessage }}
+    </div>
+
+    <!-- Boutons -->
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn fw-bold px-4"
+        style="background-color: #c9933a; color: white;"
+        [disabled]="loading">
+        {{ loading ? 'Enregistrement...' : (isEditMode ? 'Modifier' : 'Ajouter le produit') }}
+      </button>
+      <a routerLink="/admin/dashboard" class="btn btn-outline-secondary">
+        Annuler
+      </a>
+    </div>
+
+  </form>
+</div>

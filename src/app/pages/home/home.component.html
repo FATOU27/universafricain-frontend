@@ -1,0 +1,64 @@
+<!-- Hero -->
+<section class="py-5 text-white text-center"
+  style="background: linear-gradient(135deg, #2c1810 0%, #8b4513 100%); min-height: 80vh; display: flex; align-items: center;">
+  <div class="container">
+    <h1 class="display-4 fw-bold mb-3">
+      L'Artisanat Africain <br>
+      <span style="color: #c9933a;">Authentique</span>
+    </h1>
+    <p class="lead mb-4">
+      Bogolan, batik, paniers, sacs... <br>
+      Des créations uniques faites à la main au Sénégal.
+    </p>
+    <a routerLink="/catalogue" class="btn btn-lg px-5 fw-bold"
+      style="background-color: #c9933a; color: white;">
+      Découvrir la boutique
+    </a>
+  </div>
+</section>
+
+<!-- Catégories -->
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-4">Nos Collections</h2>
+    <div class="row g-4">
+
+      <div class="col-md-3 col-6" *ngFor="let cat of categories">
+        <div class="card h-100 border-0 shadow-sm text-center p-3"
+          style="cursor: pointer; transition: transform 0.2s;"
+          (mouseenter)="onHover($event, true)"
+           (mouseleave)="onHover($event, false)"
+          (click)="goToCategory(cat.slug)">
+          <div class="fs-1 mb-2">{{ cat.icon }}</div>
+          <h5 class="fw-bold mb-1">{{ cat.name }}</h5>
+          <p class="small text-muted mb-0">{{ cat.description }}</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Pourquoi nous -->
+<section class="py-5" style="background-color: #fdf6ee;">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-4">Pourquoi UniversAfricain ?</h2>
+    <div class="row g-4 text-center">
+      <div class="col-md-4">
+        <div class="fs-1 mb-2">🤝</div>
+        <h5 class="fw-bold">Artisanat authentique</h5>
+        <p class="text-muted">Chaque pièce est fabriquée à la main par des artisans sénégalais.</p>
+      </div>
+      <div class="col-md-4">
+        <div class="fs-1 mb-2">🚚</div>
+        <h5 class="fw-bold">Livraison en France</h5>
+        <p class="text-muted">Nous livrons partout en France depuis le Sénégal.</p>
+      </div>
+      <div class="col-md-4">
+        <div class="fs-1 mb-2">💛</div>
+        <h5 class="fw-bold">Commerce équitable</h5>
+        <p class="text-muted">Nous soutenons directement les artisans locaux.</p>
+      </div>
+    </div>
+  </div>
+</section>
