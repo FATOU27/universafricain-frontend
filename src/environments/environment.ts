@@ -1,5 +1,6 @@
 export const environment = {
-  production: false,
-  cloudinaryCloudName: 'YOUR_CLOUD_NAME',
+  production: true,
+  apiUrl: 'https://universafricain-backend.onrender.com',
+  cloudinaryCloudName: 'dm3h6thxe',
   cloudinaryUploadPreset: 'universafricain'
 };
