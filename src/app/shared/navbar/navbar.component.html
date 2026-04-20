@@ -31,6 +31,20 @@
     🛒 <span class="badge bg-warning text-dark">{{ cartCount }}</span>
   </a>
 </li>
+<!-- Connexion si non connecté -->
+<li class="nav-item" *ngIf="!isLoggedIn">
+  <a class="nav-link" routerLink="/login">Se connecter</a>
+</li>
+
+<!-- Admin + Déconnexion si connecté -->
+<li class="nav-item" *ngIf="isLoggedIn">
+  <a class="nav-link" routerLink="/admin">Admin</a>
+</li>
+<li class="nav-item" *ngIf="isLoggedIn">
+  <button class="btn btn-outline-warning btn-sm ms-2" (click)="logout()">
+    Déconnexion
+  </button>
+</li>
         <li class="nav-item" *ngIf="isLoggedIn">
           <a class="nav-link" routerLink="/admin">Admin</a>
         </li>
